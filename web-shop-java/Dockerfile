@@ -12,11 +12,11 @@ COPY src ./src
 RUN mvn -B clean package
 
 FROM eclipse-temurin:25-jdk-noble
-ARG TOMCAT_VERSION=10.1.60
+ARG TOMCAT_VERSION=11.0.26
 ENV CATALINA_HOME=/opt/tomcat \
     PATH="/opt/tomcat/bin:${PATH}"
 RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates tar \
-    && curl -fsSL "https://archive.apache.org/dist/tomcat/tomcat-10/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz" -o /tmp/tomcat.tar.gz \
+    && curl -fsSL "https://archive.apache.org/dist/tomcat/tomcat-11/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz" -o /tmp/tomcat.tar.gz \
     && mkdir -p /opt/tomcat \
     && tar -xzf /tmp/tomcat.tar.gz --strip-components=1 -C /opt/tomcat \
     && rm -rf /opt/tomcat/webapps/* /var/lib/apt/lists/* /tmp/tomcat.tar.gz

@@ -36,3 +36,6 @@ target/
 *.class
 *.log
 
+
+# Local-only project notes
+web-shop-java/README.md

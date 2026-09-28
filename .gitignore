@@ -24,3 +24,15 @@
 hs_err_pid*
 replay_pid*
 
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Maven build output and local environment
+target/
+.env
+
+# Additional generated files
+*.class
+*.log
+

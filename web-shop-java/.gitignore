@@ -1,0 +1,9 @@
+target/
+.idea/
+*.iml
+.env
+*.class
+*.log
+/*.md
+*.md
+../.idea/

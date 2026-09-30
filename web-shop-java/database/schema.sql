@@ -1,16 +1,13 @@
 CREATE TABLE app_user (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    username VARCHAR(80) NOT NULL UNIQUE,
+    username VARCHAR(80)  NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     full_name VARCHAR(160) NOT NULL,
     email VARCHAR(254) NOT NULL UNIQUE,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-);
-
-CREATE TABLE user_role (
-    user_id BIGINT NOT NULL REFERENCES app_user(id) ON DELETE CASCADE,
+    -- tillåter endast en roll per user, istället för att ha en hel user_role tabell
     role VARCHAR(20) NOT NULL CHECK (role IN ('CUSTOMER', 'ADMIN', 'WAREHOUSE')),
-    PRIMARY KEY (user_id, role)
+    active BOOLEAN NOT NULL DEFAULT TRUE,   -- för betyg 4 "administrera användare", dvs inaktivera eller ej.
+    created_at TIMESTAMPTZ  NOT NULL DEFAULT now()
 );
 
 CREATE TABLE category (

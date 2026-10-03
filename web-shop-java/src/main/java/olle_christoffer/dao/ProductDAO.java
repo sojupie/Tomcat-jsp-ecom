@@ -17,15 +17,16 @@ import java.util.Optional;
 public class ProductDAO {
 
     private static final String SELECT_PRODUCT =
-            "SELECT pro.id, pro.sku, pro.name, pro.description, pro.price, pro.active,"
-                    + "cat.id AS category_id, cat.name AS category_name,"
-                    + "COALESCE(i.quantity, 0) AS stock_quantity"
+            "SELECT pro.id, pro.sku, pro.name, pro.description, pro.price, pro.active, "
+                    + "cat.id AS category_id, cat.name AS category_name, "
+                    + "COALESCE(i.quantity, 0) AS stock_quantity "
                     + "FROM product pro "
                     + "JOIN category cat ON cat.id = pro.category_id "
                     + "LEFT JOIN inventory i ON i.product_id = pro.id "; // om produkt saknar lagerrad visas den med 0 i lager
 
+
     public List<Product> findAll() throws SQLException {
-        String sql = SELECT_PRODUCT + "ORDER BY p.name";
+        String sql = SELECT_PRODUCT + "ORDER BY pro.name";
 
         try (Connection con = JDBC.getConnection();
              PreparedStatement prepS = con.prepareStatement(sql);
@@ -41,7 +42,7 @@ public class ProductDAO {
     }
 
     public List<Product> findAllActive() throws SQLException { // aktiva produkter sorterade efter namnet
-        String sql = SELECT_PRODUCT + "WHERE p.active = true ORDER BY p.name";
+        String sql = SELECT_PRODUCT + "WHERE pro.active = true ORDER BY pro.name";
 
         try (Connection con = JDBC.getConnection();
              PreparedStatement prepS = con.prepareStatement(sql);
@@ -57,7 +58,7 @@ public class ProductDAO {
     }
 
     public Optional<Product> findById(long id) throws SQLException {
-        String sql = SELECT_PRODUCT + "WHERE p.id = ?";
+        String sql = SELECT_PRODUCT + "WHERE pro.id = ?";
 
         try (Connection con = JDBC.getConnection();
              PreparedStatement prepS = con.prepareStatement(sql)) {
@@ -70,7 +71,7 @@ public class ProductDAO {
     }
 
     public List<Product> findByCategory(long categoryId) throws SQLException { // samtliga aktiva produkter i given kategori
-        String sql = SELECT_PRODUCT + "WHERE p.active = true AND c.id = ? ORDER BY p.name";
+        String sql = SELECT_PRODUCT + "WHERE pro.active = true AND cat.id = ? ORDER BY pro.name";
 
         try (Connection con = JDBC.getConnection();
              PreparedStatement prepS = con.prepareStatement(sql)) {

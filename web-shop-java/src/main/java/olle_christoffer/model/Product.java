@@ -17,7 +17,7 @@ public class Product {
     private boolean active;
     private long categoryId;
     private String categoryName;
-    private int stockQ;
+    private int stock;
 
     public Product() {}
 
@@ -54,9 +54,9 @@ public class Product {
 
     public void setCategoryName(String categoryName) {this.categoryName = categoryName;}
 
-    public int getStockQ() {return stockQ;}
+    public int getStock() {return stock;}
 
-    public void setStockQ(int stockQ) {this.stockQ = stockQ;}
+    public void setStock(int stock) {this.stock = stock;}
 
-    public boolean isInStock() {return stockQ > 0;}
+    public boolean isInStock() {return stock > 0;}
 }

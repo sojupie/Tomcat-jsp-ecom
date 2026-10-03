@@ -3,7 +3,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Varukorg för självaste sessionen i Http,
@@ -12,7 +11,6 @@ import java.util.Optional;
 
 public class Cart implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     private final List<CartItem> items = new ArrayList<>();
     public List<CartItem> getItems() {return items;}
 
@@ -21,9 +19,9 @@ public class Cart implements Serializable {
             throw new IllegalArgumentException("n have to be more than 0");
         }
 
-        Optional<CartItem> existing = findByProductId(productId);
-        if (existing.isPresent()) {
-            existing.get().setQuantity(existing.get().getQuantity() + quantity); // om varan redan är i korg ökas endast antalet
+        CartItem existing = findByProductId(productId);
+        if (existing != null) {
+            existing.setQuantity(existing.getQuantity() + quantity); // om varan redan är i korg ökas endast antalet
         } else {
             items.add(new CartItem(productId, productName, unitPrice, quantity));
         }
@@ -39,7 +37,10 @@ public class Cart implements Serializable {
             return;
         }
 
-        findByProductId(productId).ifPresent(i -> i.setQuantity(quantity));
+        CartItem existing = findByProductId(productId);
+        if (existing != null) {
+            existing.setQuantity(quantity);
+        }
     }
 
     public void clear() {
@@ -55,12 +56,16 @@ public class Cart implements Serializable {
     }
 
     public BigDecimal getTotal() {
-        return items.stream()
-                .map(CartItem::getTotalSum)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return items.stream().map(CartItem::getTotalSum).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    private Optional<CartItem> findByProductId(long productId) {
-        return items.stream().filter(i -> i.getProductId() == productId).findFirst();
+    private CartItem findByProductId(long productId) {
+        for (CartItem item : items) {
+            if (item.getProductId() == productId) {
+                return item;
+            }
+        }
+
+        return null;
     }
 }

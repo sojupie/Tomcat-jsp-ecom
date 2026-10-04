@@ -5,6 +5,8 @@ services:
       POSTGRES_DB: ${DB_NAME:-webshop}
       POSTGRES_USER: ${DB_USER:-webshop}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-webshop_dev}
+    ports:
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
@@ -14,7 +16,7 @@ services:
       interval: 5s
       timeout: 3s
       retries: 20
-    # Host port is intentionally not published; the app accesses db:5432.
+    # Local database tools can use localhost:5432; the app uses db:5432.
 
   app:
     build: .

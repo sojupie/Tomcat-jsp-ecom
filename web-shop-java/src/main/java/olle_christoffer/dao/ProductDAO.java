@@ -21,7 +21,7 @@ public class ProductDAO {
                     + "cat.id AS category_id, cat.name AS category_name, "
                     + "COALESCE(i.quantity, 0) AS stock_quantity "
                     + "FROM product pro "
-                    + "JOIN category cat ON cat.id = pro.category_id "
+                    + "LEFT JOIN category cat ON cat.id = pro.category_id "
                     + "LEFT JOIN inventory i ON i.product_id = pro.id "; // om produkt saknar lagerrad visas den med 0 i lager
 
 

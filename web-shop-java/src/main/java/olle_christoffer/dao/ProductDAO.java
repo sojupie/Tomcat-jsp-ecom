@@ -99,7 +99,7 @@ public class ProductDAO {
         product.setActive(res.getBoolean("active"));
         product.setCategoryId(res.getLong("category_id"));
         product.setCategoryName(res.getString("category_name"));
-        product.setStockQ(res.getInt("stock_quantity"));
+        product.setStock(res.getInt("stock_quantity"));
 
         return product;
     }

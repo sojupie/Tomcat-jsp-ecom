@@ -22,6 +22,7 @@ public class UserDAO {
                     + "usr.role, usr.active, usr.created_at "
                     + "FROM app_user usr ";
 
+
     public Optional<User> findByUsername(String username) throws SQLException { // används vid inloggning
         String sql = SELECT_USER + "WHERE usr.username = ?";
 
@@ -100,6 +101,7 @@ public class UserDAO {
             return prepS.executeUpdate() == 1;
         }
     }
+
 
     public boolean existsByUsername(String username) throws SQLException {
         String sql = "SELECT 1 FROM app_user WHERE username = ?";

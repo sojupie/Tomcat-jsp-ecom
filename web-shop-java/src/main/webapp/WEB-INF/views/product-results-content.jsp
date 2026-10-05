@@ -4,18 +4,18 @@
 <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <fmt:setLocale value="sv_SE" />
 <c:choose>
-    <c:when test="${catalogError}">
+    <c:when test="${requestScope.catalogError}">
         <p>Sortimentet kunde inte laddas. Försök igen senare.</p>
     </c:when>
     <c:otherwise>
-        <p>Visar <c:out value="${fn:length(products)}"/> produkter.</p>
+        <p>Visar <c:out value="${fn:length(requestScope.products)}"/> produkter.</p>
         <c:choose>
-            <c:when test="${empty products}">
+            <c:when test="${empty requestScope.products}">
                 <p>Inga produkter hittades.</p>
             </c:when>
             <c:otherwise>
                 <ul>
-                    <c:forEach items="${products}" var="product">
+                    <c:forEach items="${requestScope.products}" var="product">
                         <li>
                             <p><c:out value="${product.categoryName}" default="Ingen kategori"/></p>
                             <h2><c:out value="${product.name}"/></h2>

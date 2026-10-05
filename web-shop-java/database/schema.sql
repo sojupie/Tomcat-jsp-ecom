@@ -5,7 +5,7 @@ CREATE TABLE app_user (
     full_name VARCHAR(160) NOT NULL,
     email VARCHAR(254) NOT NULL UNIQUE,
     -- tillåter endast en roll per user, istället för att ha en hel user_role tabell
-    role VARCHAR(20) NOT NULL CHECK (role IN ('CUSTOMER', 'ADMIN', 'WAREHOUSE')),
+    role VARCHAR(20) NOT NULL DEFAULT 'CUSTOMER' CHECK (role IN ('CUSTOMER', 'ADMIN', 'WAREHOUSE')),
     active BOOLEAN NOT NULL DEFAULT TRUE,   -- för betyg 4 "administrera användare", dvs inaktivera eller ej.
     created_at TIMESTAMPTZ  NOT NULL DEFAULT now()
 );

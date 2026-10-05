@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certifi
     && curl -fsSL "https://archive.apache.org/dist/tomcat/tomcat-11/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz" -o /tmp/tomcat.tar.gz \
     && mkdir -p /opt/tomcat \
     && tar -xzf /tmp/tomcat.tar.gz --strip-components=1 -C /opt/tomcat \
+    && printf '\norg.apache.catalina.core.ContainerBase.[Catalina].[localhost].handlers = 2localhost.org.apache.juli.AsyncFileHandler,java.util.logging.ConsoleHandler\n' >> /opt/tomcat/conf/logging.properties \
     && rm -rf /opt/tomcat/webapps/* /var/lib/apt/lists/* /tmp/tomcat.tar.gz
 COPY --from=build /build/target/ROOT.war /opt/tomcat/webapps/ROOT.war
 EXPOSE 8080

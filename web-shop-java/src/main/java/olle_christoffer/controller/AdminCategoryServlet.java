@@ -37,6 +37,9 @@ public class AdminCategoryServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
         } catch (IllegalArgumentException exception) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        } catch (SQLException exception) {
+            getServletContext().log("Could not load category administration", exception);
+            response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
         }
     }
 

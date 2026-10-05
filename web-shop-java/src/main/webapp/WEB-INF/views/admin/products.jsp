@@ -13,10 +13,7 @@
 </head>
 <body>
 <main class="container stack">
-    <nav>
-        <a href="${pageContext.request.contextPath}/products">Produkter</a> ·
-        <a href="${pageContext.request.contextPath}/admin/categories">Kategorier</a>
-    </nav>
+    <jsp:include page="/WEB-INF/views/shared-nav.jsp" />
     <h1>Hantera produkter</h1>
     <c:if test="${not empty requestScope.adminError}">
         <p role="alert"><c:out value="${requestScope.adminError}"/></p>

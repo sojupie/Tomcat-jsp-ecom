@@ -12,28 +12,8 @@
 </head>
 <body>
 <main class="container stack">
-    <nav>
-        <c:choose>
-            <c:when test="${not empty sessionScope.authenticatedUser}">
-                <p>Inloggad som <c:out value="${sessionScope.authenticatedUser.fullName}"/>.</p>
-                <c:if test="${sessionScope.authenticatedUser.admin}">
-                    <p><a href="${pageContext.request.contextPath}/admin/products">Hantera produkter</a></p>
-                </c:if>
-                <c:if test="${sessionScope.authenticatedUser.warehouse}">
-                    <p><a href="${pageContext.request.contextPath}/warehouse/orders">Beställningar för packning</a></p>
-                </c:if>
-                <form method="post" action="${pageContext.request.contextPath}/logout">
-                    <button type="submit">Logga ut</button>
-                </form>
-            </c:when>
-            <c:otherwise>
-                <p><a href="${pageContext.request.contextPath}/login">Logga in</a> ·
-                    <a href="${pageContext.request.contextPath}/register">Skapa konto</a></p>
-            </c:otherwise>
-        </c:choose>
-    </nav>
+    <jsp:include page="/WEB-INF/views/shared-nav.jsp" />
     <h1>Varukorg</h1>
-    <p><a href="${pageContext.request.contextPath}/products">Till produkterna</a></p>
 
     <c:if test="${not empty requestScope.cartError}">
         <p role="alert"><c:out value="${requestScope.cartError}"/></p>

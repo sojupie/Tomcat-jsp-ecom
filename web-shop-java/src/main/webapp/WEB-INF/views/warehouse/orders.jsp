@@ -12,7 +12,7 @@
 </head>
 <body>
 <main class="container stack">
-    <nav><a href="${pageContext.request.contextPath}/products">Produkter</a></nav>
+    <jsp:include page="/WEB-INF/views/shared-nav.jsp" />
     <h1>Beställningar</h1>
     <c:if test="${not empty requestScope.warehouseError}">
         <p role="alert"><c:out value="${requestScope.warehouseError}"/></p>

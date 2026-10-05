@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 
+import static olle_christoffer.controller.SessionUtilities.getAuthenticatedUser;
+
 @WebServlet("/admin/products")
 public class AdminProductServlet extends HttpServlet {
     private final ProductAdminService productService = new ProductAdminService();
@@ -23,7 +25,7 @@ public class AdminProductServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        AuthenticatedUser user = getUser(request.getSession(false));
+        AuthenticatedUser user = getAuthenticatedUser(request.getSession(false));
         if (user == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
@@ -52,7 +54,7 @@ public class AdminProductServlet extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession(false);
-        AuthenticatedUser user = getUser(session);
+        AuthenticatedUser user = getAuthenticatedUser(session);
         if (user == null) {
             response.sendRedirect(request.getContextPath() + "/login");
             return;
@@ -118,14 +120,6 @@ public class AdminProductServlet extends HttpServlet {
             getServletContext().log("Could not load product administration", exception);
             response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
         }
-    }
-
-    private AuthenticatedUser getUser(HttpSession session) {
-        if (session == null) {
-            return null;
-        }
-        Object user = session.getAttribute("authenticatedUser");
-        return user instanceof AuthenticatedUser authenticatedUser ? authenticatedUser : null;
     }
 
     private long parseLong(String value, long defaultValue) {

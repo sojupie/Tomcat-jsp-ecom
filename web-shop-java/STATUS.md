@@ -82,12 +82,12 @@ Presentation är servlet och JSP. Service innehåller programmets regler. DAO l�
 
 #### Presentation
 
-- [ ] Visa funktioner för att administrera användare.
+- [x] Visa funktioner för att administrera användare.
 
 #### Service
 
-- [ ] Hantera användarroller: kund, admin och lagerpersonal.
-- [ ] Kontrollera roller innan skyddade funktioner körs.
+- [x] Hantera användarroller: kund, admin och lagerpersonal.
+- [x] Kontrollera roller innan skyddade funktioner körs.
 
 #### DAO
 

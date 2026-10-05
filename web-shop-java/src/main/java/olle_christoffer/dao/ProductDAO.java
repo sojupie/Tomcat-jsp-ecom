@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -74,6 +76,44 @@ public class ProductDAO {
         }
     }
 
+    public long insert(Connection con, Product product) throws SQLException {
+        String sql = "INSERT INTO product (category_id, sku, name, description, price, active) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            setProductParameters(statement, product);
+            statement.executeUpdate();
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (!generatedKeys.next()) {
+                    throw new SQLException("The database did not return a product ID.");
+                }
+                return generatedKeys.getLong(1);
+            }
+        }
+    }
+
+    public boolean update(Connection con, Product product) throws SQLException {
+        String sql = "UPDATE product SET category_id = ?, sku = ?, name = ?, description = ?, "
+                + "price = ?, active = ? WHERE id = ?";
+
+        try (PreparedStatement statement = con.prepareStatement(sql)) {
+            setProductParameters(statement, product);
+            statement.setLong(7, product.getId());
+            return statement.executeUpdate() == 1;
+        }
+    }
+
+    public boolean existsBySku(Connection con, String sku, long exceptProductId) throws SQLException {
+        String sql = "SELECT 1 FROM product WHERE sku = ? AND id <> ?";
+        try (PreparedStatement statement = con.prepareStatement(sql)) {
+            statement.setString(1, sku);
+            statement.setLong(2, exceptProductId);
+            try (ResultSet results = statement.executeQuery()) {
+                return results.next();
+            }
+        }
+    }
+
     public List<Product> findByCategory(long categoryId) throws SQLException { // samtliga aktiva produkter i given kategori
         String sql = SELECT_PRODUCT + "WHERE pro.active = true AND cat.id = ? ORDER BY pro.name";
 
@@ -106,5 +146,18 @@ public class ProductDAO {
         product.setStock(res.getInt("stock_quantity"));
 
         return product;
+    }
+
+    private void setProductParameters(PreparedStatement statement, Product product) throws SQLException {
+        if (product.getCategoryId() > 0) {
+            statement.setLong(1, product.getCategoryId());
+        } else {
+            statement.setNull(1, Types.BIGINT);
+        }
+        statement.setString(2, product.getSku());
+        statement.setString(3, product.getName());
+        statement.setString(4, product.getDescription());
+        statement.setBigDecimal(5, product.getPrice());
+        statement.setBoolean(6, product.isActive());
     }
 }

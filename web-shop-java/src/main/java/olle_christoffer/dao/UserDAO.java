@@ -129,6 +129,30 @@ public class UserDAO {
         }
     }
 
+
+    public Optional<User> findByIdForUpdate(Connection con, long id) throws SQLException { // låser raden tills transaktionen är klar
+        String sql = SELECT_USER + "WHERE usr.id = ? FOR UPDATE";
+
+        try (PreparedStatement prepS = con.prepareStatement(sql)) {
+            prepS.setLong(1, id);
+            try (ResultSet res = prepS.executeQuery()) {
+                return res.next() ? Optional.of(createObject(res)) : Optional.empty();
+            }
+        }
+    }
+
+    public boolean updateRoleAndActive(Connection con, long id, User.Role role, boolean active) throws SQLException { // ingår i en transaktion
+        String sql = "UPDATE app_user SET role = ?, active = ? WHERE id = ?";
+
+        try (PreparedStatement prepS = con.prepareStatement(sql)) {
+            prepS.setString(1, role.name());
+            prepS.setBoolean(2, active);
+            prepS.setLong(3, id);
+
+            return prepS.executeUpdate() == 1;
+        }
+    }
+
     private User createObject(ResultSet res) throws SQLException {
         User user = new User();
 

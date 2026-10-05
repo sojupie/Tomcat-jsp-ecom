@@ -10,12 +10,13 @@ import java.util.List;
 
 public class CustomerOrder {
 
-    public enum Status {PLACED, PACKING, SHIPPED, CANCELLED}
+    public enum Status {PLACED, PACKING, PACKED, SHIPPED, CANCELLED}
     private long id;
     private long userId;
     private Status status = Status.PLACED; // ny beställning börjar som placerad
     private BigDecimal total;
     private OffsetDateTime createdAt;
+    private String customerName;
     private List<OrderItem> items = new ArrayList<>();
 
     public CustomerOrder() {}
@@ -33,6 +34,20 @@ public class CustomerOrder {
 
     public void setStatus(Status status) {this.status = status;}
 
+    public boolean isReadyForPacking() {
+        return status == Status.PLACED || status == Status.PACKING;
+    }
+
+    public String getStatusLabel() {
+        return switch (status) {
+            case PLACED -> "Mottagen";
+            case PACKING -> "Packas";
+            case PACKED -> "Packad";
+            case SHIPPED -> "Skickad";
+            case CANCELLED -> "Avbruten";
+        };
+    }
+
     public BigDecimal getTotal() {return total;}
 
     public void setTotal(BigDecimal total) {this.total = total;}
@@ -40,6 +55,10 @@ public class CustomerOrder {
     public OffsetDateTime getCreatedAt() {return createdAt;}
 
     public void setCreatedAt(OffsetDateTime createdAt) {this.createdAt = createdAt;}
+
+    public String getCustomerName() {return customerName;}
+
+    public void setCustomerName(String customerName) {this.customerName = customerName;}
 
     public List<OrderItem> getItems() {return items;}
 

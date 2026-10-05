@@ -22,4 +22,6 @@ public class AuthenticatedUser implements Serializable {
     public String getUsername() { return username; }
     public String getFullName() { return fullName; }
     public User.Role getRole() { return role; }
+    public boolean isAdmin() { return role == User.Role.ADMIN; }
+    public boolean isWarehouse() { return role == User.Role.WAREHOUSE; }
 }

@@ -51,11 +51,19 @@ public class InventoryDAO {
         }
 
 
+        try (Connection con = JDBC.getConnection()) {
+            setQuantity(con, productId, quantity);
+        }
+    }
+
+    public void setQuantity(Connection con, long productId, int quantity) throws SQLException {
+        if (quantity < 0) {
+            throw new IllegalArgumentException("quantity cannot be negative");
+        }
+
         String sql = "INSERT INTO inventory (product_id, quantity) VALUES (?, ?) "
                 + "ON CONFLICT (product_id) DO UPDATE SET quantity = EXCLUDED.quantity, updated_at = now()";
-
-        try (Connection con = JDBC.getConnection();
-             PreparedStatement prepS = con.prepareStatement(sql)) {
+        try (PreparedStatement prepS = con.prepareStatement(sql)) {
 
             prepS.setLong(1, productId);
             prepS.setInt(2, quantity);

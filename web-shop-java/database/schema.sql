@@ -36,7 +36,7 @@ CREATE TABLE customer_order (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     user_id BIGINT NOT NULL REFERENCES app_user(id),
     status VARCHAR(20) NOT NULL DEFAULT 'PLACED'
-        CHECK (status IN ('PLACED', 'PACKING', 'SHIPPED', 'CANCELLED')),
+        CHECK (status IN ('PLACED', 'PACKING', 'PACKED', 'SHIPPED', 'CANCELLED')),
     total NUMERIC(12, 2) NOT NULL CHECK (total >= 0),
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );

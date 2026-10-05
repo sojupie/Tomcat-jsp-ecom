@@ -82,12 +82,12 @@ Presentation är servlet och JSP. Service innehåller programmets regler. DAO l�
 
 #### Presentation
 
-- [ ] Visa funktioner för att administrera användare.
+- [x] Visa funktioner för att administrera användare.
 
 #### Service
 
-- [ ] Hantera användarroller: kund, admin och lagerpersonal.
-- [ ] Kontrollera roller innan skyddade funktioner körs.
+- [x] Hantera användarroller: kund, admin och lagerpersonal.
+- [x] Kontrollera roller innan skyddade funktioner körs.
 
 #### DAO
 
@@ -99,36 +99,36 @@ Presentation är servlet och JSP. Service innehåller programmets regler. DAO l�
 
 #### Presentation
 
-- [ ] Skapa formulär för att lägga till och ändra produkter och kategorier.
+- [x] Skapa formulär för att lägga till och ändra produkter och kategorier.
 
 #### Service
 
-- [ ] Kontrollera indata och hantera produkt- och kategoriregler.
+- [x] Kontrollera indata och hantera produkt- och kategoriregler.
 
 #### DAO
 
-- [ ] Spara och läsa produkter och kategorier.
-- [ ] Uppdatera lager för produkter.
+- [x] Spara och läsa produkter och kategorier.
+- [x] Uppdatera lager för produkter.
 
 ### Lagerarbete
 
 #### Presentation
 
-- [ ] Visa beställningar för lagerpersonal.
-- [ ] Låta lagerpersonal markera beställningar som packade.
+- [x] Visa beställningar för lagerpersonal.
+- [x] Låta lagerpersonal markera beställningar som packade.
 
 #### Service
 
-- [ ] Kontrollera vilka beställningar lagerpersonal får packa.
+- [x] Kontrollera vilka beställningar lagerpersonal får packa.
 
 #### DAO
 
-- [ ] Läsa beställningar och spara deras status.
+- [x] Läsa beställningar och spara deras status.
 
 ### Behörighet och MVC
 
-- [ ] Kontrollera behörighet för alla administrations- och lagerfunktioner.
-- [ ] Använda en tydlig MVC-struktur för hela webbshoppen.
+- [x] Kontrollera behörighet för produkt-, kategori- och lagerfunktionerna.
+- [x] Använda servlets som controllers, JSP som vyer och modeller, tillsammans med service och DAO.
 
 ## Inför redovisningen
 

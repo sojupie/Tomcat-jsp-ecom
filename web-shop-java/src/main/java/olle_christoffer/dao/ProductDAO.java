@@ -58,12 +58,16 @@ public class ProductDAO {
     }
 
     public Optional<Product> findById(long id) throws SQLException {
+        try (Connection con = JDBC.getConnection()) {
+            return findById(con, id);
+        }
+    }
+
+    public Optional<Product> findById(Connection con, long id) throws SQLException {
         String sql = SELECT_PRODUCT + "WHERE pro.id = ?";
 
-        try (Connection con = JDBC.getConnection();
-             PreparedStatement prepS = con.prepareStatement(sql)) {
-
-            prepS.setLong(1, id); // för förebygga SQL-injection
+        try (PreparedStatement prepS = con.prepareStatement(sql)) {
+            prepS.setLong(1, id);
             try (ResultSet res = prepS.executeQuery()) {
                 return res.next() ? Optional.of(createObject(res)) : Optional.empty();
             }

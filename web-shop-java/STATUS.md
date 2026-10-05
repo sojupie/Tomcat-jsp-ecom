@@ -64,19 +64,19 @@ Presentation är servlet och JSP. Service innehåller programmets regler. DAO l�
 
 #### Presentation
 
-- [ ] Låta kunden skicka varukorgen som en beställning.
-- [ ] Visa bekräftelse efter lyckad beställning.
+- [x] Låta kunden skicka varukorgen som en beställning.
+- [x] Visa bekräftelse efter lyckad beställning.
 
 #### Service
 
-- [ ] Kontrollera beställningen och samordna order och lager.
-- [ ] Tömma varukorgen först när beställningen har sparats.
+- [x] Kontrollera beställningen och samordna order och lager.
+- [x] Tömma varukorgen först när beställningen har sparats.
 
 #### DAO
 
-- [ ] Spara beställning och orderrader i en databastransaktion.
-- [ ] Minska lagersaldo i samma transaktion.
-- [ ] Rulla tillbaka ändringarna om beställningen misslyckas.
+- [x] Spara beställning och orderrader i en databastransaktion.
+- [x] Minska lagersaldo i samma transaktion.
+- [x] Rulla tillbaka ändringarna om beställningen misslyckas.
 
 ### Användaradministration och roller
 

@@ -23,6 +23,11 @@ public class CartServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         Cart cart = getCart(session);
+        Object orderNotice = session.getAttribute("orderNotice");
+        if (orderNotice != null) {
+            request.setAttribute("orderNotice", orderNotice);
+            session.removeAttribute("orderNotice");
+        }
         try {
             if (cartService.adjustToAvailableStock(cart)) {
                 request.setAttribute(CART_NOTICE_ATTRIBUTE,

@@ -35,6 +35,9 @@
     <c:if test="${not empty requestScope.cartNotice}">
         <p role="status"><c:out value="${requestScope.cartNotice}"/></p>
     </c:if>
+    <c:if test="${not empty requestScope.orderNotice}">
+        <p role="status"><c:out value="${requestScope.orderNotice}"/></p>
+    </c:if>
 
     <c:choose>
         <c:when test="${empty requestScope.cart.items}">
@@ -58,6 +61,16 @@
             </ul>
             <p>Totalt antal varor: <c:out value="${requestScope.cart.totalQuantity}"/></p>
             <p>Totalt: <fmt:formatNumber value="${requestScope.cart.total}" minFractionDigits="2" maxFractionDigits="2"/> kr</p>
+            <c:choose>
+                <c:when test="${not empty sessionScope.authenticatedUser}">
+                    <form method="post" action="${pageContext.request.contextPath}/checkout">
+                        <button type="submit">Skicka beställning</button>
+                    </form>
+                </c:when>
+                <c:otherwise>
+                    <p><a href="${pageContext.request.contextPath}/login">Logga in för att skicka beställningen</a></p>
+                </c:otherwise>
+            </c:choose>
         </c:otherwise>
     </c:choose>
 </main>

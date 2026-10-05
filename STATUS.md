@@ -2,19 +2,19 @@
 
 ## Betyg 3
 
-- [ ] Varukorg som går att använda på webben. Varukorgsmodellen finns, men saknar koppling till webbsidorna.
-- [ ] Lägga varor i varukorgen och visa innehållet.
+- [x] Varukorg.
+- [x] Lägga varor i varukorgen, visa varukorgen och ta bort varor.
 - [ ] Inloggning.
-- [x] Produktkatalogen använder servlet, service, DAO och JSP.
-- [ ] Tre lager används för hela webbshoppen.
+- [ ] Trelagersarkitektur för hela webbshoppen.
+- [x] Produktkatalog med servlet, service, DAO och JSP.
 
 ## Betyg 4
 
-- [x] Lagerantal finns i databasen och visas för produkterna.
-- [ ] Skicka en order i en databastransaktion.
+- [x] Lagerstatus.
+- [ ] Skicka ordrar i en databastransaktion.
 - [ ] Administrera användare.
-- [ ] Behörigheter för kund, administratör och lagerpersonal. Roller finns i databasschemat, men kontrolleras inte i webbappen.
-- [ ] En tydlig trelagersstruktur för hela webbshoppen.
+- [ ] Behörigheter för kund, administratör och lagerpersonal.
+- [ ] Tydlig trelagersstruktur för webbshoppen.
 
 ## Betyg 5
 
@@ -25,6 +25,6 @@
 
 ## Inför redovisningen
 
-- [ ] Testa programmet och dokumentera lösningen.
+- [ ] Testa och dokumentera lösningen.
 - [ ] Ta fram ett klassdiagram.
 - [ ] Dela det privata kodförrådet med läraren och den opponerande gruppen.

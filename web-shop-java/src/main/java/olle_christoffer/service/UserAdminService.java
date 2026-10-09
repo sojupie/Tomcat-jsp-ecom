@@ -1,6 +1,8 @@
 package olle_christoffer.service;
 
 import olle_christoffer.dao.UserDAO;
+import olle_christoffer.dto.UserDTO;
+import olle_christoffer.mapper.DtoMapper;
 import olle_christoffer.model.User;
 import olle_christoffer.utilities.JDBC;
 
@@ -18,17 +20,10 @@ import java.util.Optional;
 public class UserAdminService {
     private final UserDAO userDAO = new UserDAO();
 
-    public List<User> listUsers(long actingAdminId) throws SQLException {
+    public List<UserDTO> listUsers(long actingAdminId) throws SQLException {
         requireActiveAdmin(userDAO.findById(actingAdminId));
 
-
-        List<User> users = userDAO.findAll();
-        for (User user : users) {
-            user.setPasswordHash(null);
-
-        }
-
-        return users;
+        return DtoMapper.toUserDtos(userDAO.findAll());
     }
 
     public void changeRoleAndActive(long actingAdminId, long targetUserId, User.Role newRole, boolean newActive)

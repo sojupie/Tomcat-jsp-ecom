@@ -1,8 +1,10 @@
 package olle_christoffer.service;
 
+import olle_christoffer.dto.CartDTO;
+import olle_christoffer.dto.ProductDTO;
+import olle_christoffer.mapper.DtoMapper;
 import olle_christoffer.model.Cart;
 import olle_christoffer.model.CartItem;
-import olle_christoffer.model.Product;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ public class CartService {
             throw new IllegalArgumentException("Quantity must be greater than zero.");
         }
 
-        Product product = productService.findActiveProduct(productId)
+        ProductDTO product = productService.findActiveProduct(productId)
                 .orElseThrow(() -> new IllegalArgumentException("Product is no longer available."));
 
         cart.addItem(product.getId(), product.getName(), product.getPrice(), quantity);
@@ -24,7 +26,7 @@ public class CartService {
     public boolean adjustToAvailableStock(Cart cart) throws SQLException {
         boolean adjusted = false;
         for (CartItem item : new ArrayList<>(cart.getItems())) {
-            Product product = productService.findActiveProduct(item.getProductId()).orElse(null);
+            ProductDTO product = productService.findActiveProduct(item.getProductId()).orElse(null);
             if (product == null || product.getStock() <= 0) {
                 cart.removeItem(item.getProductId());
                 adjusted = true;
@@ -38,6 +40,11 @@ public class CartService {
 
     public void removeProduct(Cart cart, long productId) {
         cart.removeItem(productId);
+    }
+
+
+    public CartDTO toView(Cart cart) {
+        return DtoMapper.toDto(cart);
     }
 
 }

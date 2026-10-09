@@ -6,8 +6,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import olle_christoffer.dto.ProductDTO;
 import olle_christoffer.model.AuthenticatedUser;
-import olle_christoffer.model.Product;
 import olle_christoffer.service.CategoryAdminService;
 import olle_christoffer.service.ProductAdminService;
 
@@ -32,8 +32,7 @@ public class AdminProductServlet extends HttpServlet {
         }
 
         try {
-            Product product = new Product();
-            product.setActive(true);
+            ProductDTO product = new ProductDTO(0, null, null, null, null, true, 0, null, 0);
             String editId = request.getParameter("edit");
             if (editId != null && !editId.isBlank()) {
                 product = productService.findProduct(user.getId(), Long.parseLong(editId));
@@ -60,17 +59,9 @@ public class AdminProductServlet extends HttpServlet {
             return;
         }
 
-        Product product = new Product();
+        ProductDTO product = echoForm(request);
         try {
-            product.setId(parseLong(request.getParameter("id"), 0));
-            product.setSku(request.getParameter("sku"));
-            product.setName(request.getParameter("name"));
-            product.setDescription(request.getParameter("description"));
-            product.setPrice(new BigDecimal(request.getParameter("price")));
-            product.setCategoryId(parseLong(request.getParameter("categoryId"), 0));
-            product.setStock(Integer.parseInt(request.getParameter("stock")));
-            product.setActive(request.getParameter("active") != null);
-
+            product = readForm(request);
             productService.saveProduct(user.getId(), product);
             session.setAttribute("adminNotice", "Produkten sparades.");
             response.sendRedirect(request.getContextPath() + "/admin/products");
@@ -87,15 +78,13 @@ public class AdminProductServlet extends HttpServlet {
         }
     }
 
-    private void showAfterPost(HttpServletRequest request, HttpServletResponse response, long userId,
-                               Product product, String error, int status)
+    private void showAfterPost(HttpServletRequest request, HttpServletResponse response, long userId, ProductDTO product, String error, int status)
             throws ServletException, IOException {
         request.setAttribute("adminError", error);
         showPage(request, response, userId, product, null, status);
     }
 
-    private void showPage(HttpServletRequest request, HttpServletResponse response, long userId,
-                          Product product, String error, int status)
+    private void showPage(HttpServletRequest request, HttpServletResponse response, long userId, ProductDTO product, String error, int status)
             throws ServletException, IOException {
         try {
             request.setAttribute("products", productService.listProducts(userId));
@@ -120,6 +109,33 @@ public class AdminProductServlet extends HttpServlet {
             getServletContext().log("Could not load product administration", exception);
             response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
         }
+    }
+
+    private ProductDTO readForm(HttpServletRequest request) {
+        return new ProductDTO(
+                parseLong(request.getParameter("id"), 0),
+                request.getParameter("sku"),
+                request.getParameter("name"),
+                request.getParameter("description"),
+                new BigDecimal(request.getParameter("price")),
+                request.getParameter("active") != null,
+                parseLong(request.getParameter("categoryId"), 0),
+                null,
+                Integer.parseInt(request.getParameter("stock")));
+    }
+
+    private ProductDTO echoForm(HttpServletRequest request) {
+        BigDecimal price = null;
+        int stock = 0;
+        long id = 0;
+        long categoryId = 0;
+        try { price = new BigDecimal(request.getParameter("price")); } catch (RuntimeException ignored) { }
+        try { stock = Integer.parseInt(request.getParameter("stock")); } catch (RuntimeException ignored) { }
+        try { id = parseLong(request.getParameter("id"), 0); } catch (RuntimeException ignored) { }
+        try { categoryId = parseLong(request.getParameter("categoryId"), 0); } catch (RuntimeException ignored) { }
+        return new ProductDTO(id, request.getParameter("sku"), request.getParameter("name"),
+                request.getParameter("description"), price, request.getParameter("active") != null,
+                categoryId, null, stock);
     }
 
     private long parseLong(String value, long defaultValue) {

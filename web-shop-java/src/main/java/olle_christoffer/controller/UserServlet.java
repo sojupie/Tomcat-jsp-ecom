@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import olle_christoffer.model.AuthenticatedUser;
-import olle_christoffer.model.User;
+import olle_christoffer.dto.UserUpdateDTO;
 import olle_christoffer.service.UserAdminService;
 
 import java.io.IOException;
@@ -43,10 +43,11 @@ public class UserServlet extends HttpServlet {
         }
 
         try {
-            long targetUserId = Long.parseLong(request.getParameter("userId"));
-            User.Role role = parseRole(request.getParameter("role"));
-            boolean active = "true".equals(request.getParameter("active"));
-            userAdminService.changeRoleAndActive(user.getId(), targetUserId, role, active);
+            UserUpdateDTO update = new UserUpdateDTO(
+                    Long.parseLong(request.getParameter("userId")),
+                    request.getParameter("role"),
+                    "true".equals(request.getParameter("active")));
+            userAdminService.changeRoleAndActive(user.getId(), update);
             session.setAttribute("userAdminNotice", "Användaren uppdaterades.");
             response.sendRedirect(request.getContextPath() + "/admin/users");
         } catch (IllegalArgumentException exception) {
@@ -90,10 +91,4 @@ public class UserServlet extends HttpServlet {
         }
     }
 
-    private User.Role parseRole(String value) {
-        if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException("A role is required.");
-        }
-        return User.Role.valueOf(value);
-    }
 }

@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import olle_christoffer.model.AuthenticatedUser;
-import olle_christoffer.model.Category;
+import olle_christoffer.dto.CategoryDTO;
 import olle_christoffer.service.CategoryAdminService;
 
 import java.io.IOException;
@@ -29,7 +29,7 @@ public class AdminCategoryServlet extends HttpServlet {
         }
 
         try {
-            Category category = new Category();
+            CategoryDTO category = new CategoryDTO(0, null, null);
             String editId = request.getParameter("edit");
             if (editId != null && !editId.isBlank()) {
                 category = categoryService.findCategory(user.getId(), Long.parseLong(editId));
@@ -56,11 +56,10 @@ public class AdminCategoryServlet extends HttpServlet {
             return;
         }
 
-        Category category = new Category();
+        CategoryDTO category = new CategoryDTO(0, request.getParameter("name"), request.getParameter("description"));
         try {
-            category.setId(parseLong(request.getParameter("id"), 0));
-            category.setName(request.getParameter("name"));
-            category.setDescription(request.getParameter("description"));
+            category = new CategoryDTO(parseLong(request.getParameter("id"), 0),
+                    request.getParameter("name"), request.getParameter("description"));
             categoryService.saveCategory(user.getId(), category);
             session.setAttribute("adminNotice", "Kategorin sparades.");
             response.sendRedirect(request.getContextPath() + "/admin/categories");
@@ -77,8 +76,7 @@ public class AdminCategoryServlet extends HttpServlet {
         }
     }
 
-    private void showPage(HttpServletRequest request, HttpServletResponse response, long userId,
-                          Category category, String error, int status)
+    private void showPage(HttpServletRequest request, HttpServletResponse response, long userId, CategoryDTO category, String error, int status)
             throws ServletException, IOException {
         try {
             request.setAttribute("categories", categoryService.listCategories(userId));

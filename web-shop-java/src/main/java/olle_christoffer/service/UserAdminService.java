@@ -1,6 +1,9 @@
 package olle_christoffer.service;
 
 import olle_christoffer.dao.UserDAO;
+import olle_christoffer.dto.UserDTO;
+import olle_christoffer.dto.UserUpdateDTO;
+import olle_christoffer.mapper.DtoMapper;
 import olle_christoffer.model.User;
 import olle_christoffer.utilities.JDBC;
 
@@ -18,24 +21,19 @@ import java.util.Optional;
 public class UserAdminService {
     private final UserDAO userDAO = new UserDAO();
 
-    public List<User> listUsers(long actingAdminId) throws SQLException {
+    public List<UserDTO> listUsers(long actingAdminId) throws SQLException {
         requireActiveAdmin(userDAO.findById(actingAdminId));
 
-
-        List<User> users = userDAO.findAll();
-        for (User user : users) {
-            user.setPasswordHash(null);
-
-        }
-
-        return users;
+        return DtoMapper.toUserDtos(userDAO.findAll());
     }
 
-    public void changeRoleAndActive(long actingAdminId, long targetUserId, User.Role newRole, boolean newActive)
+    public void changeRoleAndActive(long actingAdminId, UserUpdateDTO update)
             throws SQLException {
-        if (newRole == null) {
-            throw new IllegalArgumentException("Välj en roll.");
+        if (update == null) {
+            throw new IllegalArgumentException("User update is required.");
         }
+        long targetUserId = update.getUserId();
+        User.Role newRole = parseRole(update.getRole());
 
         if (actingAdminId == targetUserId) {
             throw new IllegalArgumentException("Du kan inte ändra din egen roll eller spärra dig själv.");
@@ -61,7 +59,7 @@ public class UserAdminService {
                     throw new IllegalArgumentException("Användaren finns inte.");
                 }
 
-                userDAO.updateRoleAndActive(con, targetUserId, newRole, newActive);
+                userDAO.updateRoleAndActive(con, targetUserId, newRole, update.isActive());
                 con.commit();
 
             } catch (SQLException | RuntimeException exception) {
@@ -69,6 +67,13 @@ public class UserAdminService {
                 throw exception;
             }
         }
+    }
+
+    private User.Role parseRole(String value) {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException("A role is required.");
+        }
+        return User.Role.valueOf(value);
     }
 
     private void requireActiveAdmin(Optional<User> user) {

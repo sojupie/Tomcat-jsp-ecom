@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import olle_christoffer.model.AuthenticatedUser;
 import olle_christoffer.model.Cart;
+import olle_christoffer.service.CartService;
 import olle_christoffer.service.OrderService;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ public class CheckoutServlet extends HttpServlet {
     private static final String CART_ATTRIBUTE = "cart";
     private static final String USER_ATTRIBUTE = "authenticatedUser";
     private final OrderService orderService = new OrderService();
+    private final CartService cartService = new CartService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -65,7 +67,7 @@ public class CheckoutServlet extends HttpServlet {
     private void forwardCart(HttpServletRequest request, HttpServletResponse response, Cart cart,
                              int status, String error)
             throws ServletException, IOException {
-        request.setAttribute(CART_ATTRIBUTE, cart);
+        request.setAttribute(CART_ATTRIBUTE, cartService.toView(cart));
         request.setAttribute("cartError", error);
         response.setStatus(status);
         request.getRequestDispatcher("/WEB-INF/views/cart.jsp").forward(request, response);

@@ -3,6 +3,8 @@ package olle_christoffer.service;
 import olle_christoffer.dao.CategoryDAO;
 import olle_christoffer.dao.InventoryDAO;
 import olle_christoffer.dao.ProductDAO;
+import olle_christoffer.dto.ProductDTO;
+import olle_christoffer.mapper.DtoMapper;
 import olle_christoffer.model.Product;
 import olle_christoffer.utilities.JDBC;
 
@@ -16,19 +18,25 @@ public class ProductAdminService {
     private final CategoryDAO categoryDAO = new CategoryDAO();
     private final InventoryDAO inventoryDAO = new InventoryDAO();
 
-    public List<Product> listProducts(long adminId) throws SQLException {
+    public List<ProductDTO> listProducts(long adminId) throws SQLException {
         authorizationService.requireAdmin(adminId);
-        return productDAO.findAll();
+        return DtoMapper.toProductDtos(productDAO.findAll());
     }
 
-    public Product findProduct(long adminId, long productId) throws SQLException {
+    public ProductDTO findProduct(long adminId, long productId) throws SQLException {
         authorizationService.requireAdmin(adminId);
         return productDAO.findById(productId)
+                .map(DtoMapper::toDto)
                 .orElseThrow(() -> new IllegalArgumentException("Product does not exist."));
     }
 
-    public long saveProduct(long adminId, Product product) throws SQLException {
+    public long saveProduct(long adminId, ProductDTO form) throws SQLException {
         authorizationService.requireAdmin(adminId);
+        if (form == null) {
+            throw new IllegalArgumentException("Invalid product.");
+        }
+
+        Product product = DtoMapper.toModel(form);
         validate(product);
 
         try (Connection connection = JDBC.getConnection()) {

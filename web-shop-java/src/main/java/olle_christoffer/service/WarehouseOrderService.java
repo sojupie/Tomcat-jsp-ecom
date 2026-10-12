@@ -1,8 +1,8 @@
 package olle_christoffer.service;
 
 import olle_christoffer.dao.OrderDAO;
-import olle_christoffer.model.CustomerOrder;
-
+import olle_christoffer.dto.OrderDTO;
+import olle_christoffer.mapper.DtoMapper;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -10,9 +10,9 @@ public class WarehouseOrderService {
     private final AuthorizationService authorizationService = new AuthorizationService();
     private final OrderDAO orderDAO = new OrderDAO();
 
-    public List<CustomerOrder> listOrders(long warehouseUserId) throws SQLException {
+    public List<OrderDTO> listOrders(long warehouseUserId) throws SQLException {
         authorizationService.requireWarehouse(warehouseUserId);
-        return orderDAO.findAllForWarehouse();
+        return DtoMapper.toOrderDtos(orderDAO.findAllForWarehouse());
     }
 
     public void markPacked(long warehouseUserId, long orderId) throws SQLException {

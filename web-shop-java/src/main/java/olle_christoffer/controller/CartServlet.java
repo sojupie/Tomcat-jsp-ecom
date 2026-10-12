@@ -38,7 +38,7 @@ public class CartServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
             request.setAttribute("cartError", "Stock could not be checked. Please try again later.");
         }
-        request.setAttribute(CART_ATTRIBUTE, cart);
+        request.setAttribute(CART_ATTRIBUTE, cartService.toView(cart));
         request.getRequestDispatcher("/WEB-INF/views/cart.jsp").forward(request, response);
     }
 
@@ -65,13 +65,13 @@ public class CartServlet extends HttpServlet {
 
             response.sendRedirect(request.getContextPath() + "/cart");
         } catch (IllegalArgumentException exception) {
-            request.setAttribute(CART_ATTRIBUTE, cart);
+            request.setAttribute(CART_ATTRIBUTE, cartService.toView(cart));
             request.setAttribute("cartError", "Check the product and quantity, then try again.");
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             request.getRequestDispatcher("/WEB-INF/views/cart.jsp").forward(request, response);
         } catch (SQLException exception) {
             getServletContext().log("Could not add product to cart", exception);
-            request.setAttribute(CART_ATTRIBUTE, cart);
+            request.setAttribute(CART_ATTRIBUTE, cartService.toView(cart));
             request.setAttribute("cartError", "The cart could not be updated. Please try again later.");
             response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
             request.getRequestDispatcher("/WEB-INF/views/cart.jsp").forward(request, response);
